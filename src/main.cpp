@@ -1,35 +1,55 @@
+#include "../include/ArvoreBinaria.h"
 #include <iostream>
-#include "../include/pessoa.h"
-#include "../include/ListaNaoOrdenada.h"
-#include "../include/ListaOrdenada.h"
-#include "../include/ListaEncadeada.h"
 
+int main() {
+    ArvoreBinaria arvore;
 
+     
+    arvore.Inserir(new ElementoConcreto(10));
+    arvore.Inserir(new ElementoConcreto(5));
+    arvore.Inserir(new ElementoConcreto(15));
+    arvore.Inserir(new ElementoConcreto(3));
+    arvore.Inserir(new ElementoConcreto(7));
+    arvore.Inserir(new ElementoConcreto(12));
+    arvore.Inserir(new ElementoConcreto(17));
 
-int main(){
-   
-    std::cout << "iniciando" << std::endl;
-    ListaEncadeada lista; 
+    std::cout << "Percurso em ordem: ";
+    arvore.emOrdem();  
 
+    std::cout << "Percurso pre-ordem: ";
+    arvore.preOrdem();  
 
-    // Criar objetos Pessoa
-    Pessoa breno(1, "Breno", 20);
-    Pessoa joao(2, "Joao", 25);
-    Pessoa jose(3, "jose", 30);
-    Pessoa Pedro(5, "Pedro", 30);
-    
-    std::cout << "inserindo" << std::endl;
-    lista.InserirIni(&breno); 
-    lista.InserirIni(&joao);
-    lista.InserirFim(&Pedro);
+    std::cout << "Percurso pos-ordem: ";
+    arvore.posOrdem();  
 
-    lista.PrintDados();
+     
+    ElementoConcreto procurado1(7);
+    try {
+        Elemento* encontrado = arvore.BuscarPeloID(procurado1);
+        std::cout << "Elemento encontrado: ";
+        encontrado->imprimirInfo();
+    } catch (std::exception& e) {
+        std::cout << "Erro: " << e.what() << std::endl;
+    }
 
-    std::cout << "funciona" << std::endl;
+     
+    ElementoConcreto procurado2(20);
+    try {
+        Elemento* encontrado = arvore.BuscarPeloID(procurado2);
+        std::cout << "Elemento encontrado: ";
+        encontrado->imprimirInfo();
+    } catch (std::exception& e) {
+        std::cout << "Erro: " << e.what() << std::endl;
+    }
 
-    
+     
+    std::cout << "\nRemovendo o elemento 10..." << std::endl;
+    arvore.RemoverPeloID(&procurado1);  
+    ElementoConcreto remover(10);
+    arvore.RemoverPeloID(&remover);
+
+    std::cout << "Percurso em ordem após remoção: ";
+    arvore.emOrdem();  
+
     return 0;
 }
-
-
-

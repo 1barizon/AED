@@ -1,45 +1,40 @@
 #include "../include/ArvoreBinaria.h"
 #include <iostream>
 
-template<typename T>
-ArvoreBinaria<T>::ArvoreBinaria() : NdeElementos(0)
+ArvoreBinaria::ArvoreBinaria()
 {
     raiz = nullptr;
 }
 
-template<typename T>
-void ArvoreBinaria<T>::InserirValor(T elemento) {
-    raiz = InserirAux(raiz, elemento);
+void ArvoreBinaria::Inserir(Elemento* item) {
+    raiz = InserirAux(raiz, *item);
 }
 
-template<typename T>
-typename ArvoreBinaria<T>::No* ArvoreBinaria<T>::InserirAux(No* no,const T& elemento) {
+typename ArvoreBinaria::No* ArvoreBinaria::InserirAux(No* no, Elemento  &item) {
     if (no == nullptr) {            //se a raiz for nula insere na propria raiz
-        return new No(elemento);                 
+        return new No(&item);                 
     }
 
-    if (elemento < no->dado)
-        no->esquerda = InserirAux(no->esquerda, elemento); //se for menor que a raiz insere na esquerda se for maior na direita
-    else if (elemento > no->dado)
-        no->direita = InserirAux(no->direita, elemento);
+    if (item.getID() < (no->dado)->getID())
+        no->esquerda = InserirAux(no->esquerda, item); //se for menor que a raiz insere na esquerda se for maior na direita
+    else if (item.getID() > (no->dado)->getID())
+        no->direita = InserirAux(no->direita, item);
 
     return no;
 }
 
-template<typename T>
-void ArvoreBinaria<T>::RemoverValor(T elemento) {
-    raiz = RemoverAux(raiz, elemento);
+void ArvoreBinaria::RemoverPeloID(Elemento* item) {
+    raiz = RemoverAux(raiz, *item);
 }
 
-template<typename T>
-typename ArvoreBinaria<T>::No* ArvoreBinaria<T>::RemoverAux(No* no, T elemento) {
+typename ArvoreBinaria::No* ArvoreBinaria::RemoverAux(No* no, Elemento& item) {
     if (no == nullptr)
         throw std::runtime_error("Elemento não encontrado");
 
-    if (elemento < no->dado) {
-        no->esquerda = RemoverAux(no->esquerda, elemento);
-    } else if (elemento > no->dado) {
-        no->direita = RemoverAux(no->direita, elemento);
+    if (item.getID() < (no->dado)->getID()) {
+        no->esquerda = RemoverAux(no->esquerda, item);
+    } else if (item.getID() > (no->dado)->getID()) {
+        no->direita = RemoverAux(no->direita, item);
     } else {
         if (no->esquerda == nullptr && no->direita == nullptr) {
             delete no;  //se a pagina não tem filhos so remove
@@ -59,21 +54,20 @@ typename ArvoreBinaria<T>::No* ArvoreBinaria<T>::RemoverAux(No* no, T elemento) 
             substituto = substituto->direita;
 
             no->dado = substituto->dado;
-            no->esquerda = RemoverAux(no->esquerda, substituto->dado);
+            no->esquerda = RemoverAux(no->esquerda, *substituto->dado);
 }
     }
 
     return no;
 }
 
-template<typename T>
-T ArvoreBinaria<T>::BuscarValor(const T& elemento) const {
+Elemento* ArvoreBinaria::BuscarPeloID( Elemento& item) {
     No* atual = raiz;
 
     while (atual != nullptr) {
-        if (elemento == atual->dado) {
-            return atual->dado;
-        } else if (elemento < atual->dado) { //busca simples por maior e menor
+        if (item.getID() == (atual->dado)->getID()) {
+            return  atual->dado;
+        } else if (item.getID() < (atual->dado)->getID()) { //busca simples por maior e menor
             atual = atual->esquerda; 
         } else {
             atual = atual->direita;
@@ -83,13 +77,13 @@ T ArvoreBinaria<T>::BuscarValor(const T& elemento) const {
     throw std::runtime_error("Elemento não encontrado");
 }
 
-template<typename T>
-int ArvoreBinaria<T>::altura() const {
+
+int ArvoreBinaria::altura() const {
     return alturaAux(raiz);
 }
 
-template<typename T>
-int ArvoreBinaria<T>::alturaAux(No* no) const {
+
+int ArvoreBinaria::alturaAux(No* no) const {
     if (no == nullptr) {
         return 0;                   //função que calcula a altura da árvore
     }
@@ -97,18 +91,56 @@ int ArvoreBinaria<T>::alturaAux(No* no) const {
     int alturaEsq = alturaAux(no->esquerda);
     int alturaDir = alturaAux(no->direita);
 
-    return 1 + (alturaEsq > alturaDir ? alturaEsq : alturaDir);
+    return 1 + std::max(alturaEsq, alturaDir);
 }
 
-template<typename T>
-ArvoreBinaria<T>::~ArvoreBinaria() {
+void ArvoreBinaria::emOrdem() const {
+    emOrdemAux(raiz);
+    std::cout << std::endl;
+}
+
+void ArvoreBinaria::emOrdemAux(No* no) const {
+    if (no != nullptr) {
+        emOrdemAux(no->esquerda);
+        std::cout << no->dado->getID() << " ";
+        emOrdemAux(no->direita);
+    }
+}
+
+void ArvoreBinaria::preOrdem() const {
+    preOrdemAux(raiz);
+    std::cout << std::endl;
+}
+
+void ArvoreBinaria::preOrdemAux(No* no) const {
+    if (no != nullptr) {
+        std::cout << no->dado->getID() << " ";
+        preOrdemAux(no->esquerda);
+        preOrdemAux(no->direita);
+    }
+}
+
+void ArvoreBinaria::posOrdem() const {
+    posOrdemAux(raiz);
+    std::cout << std::endl;
+}
+
+void ArvoreBinaria::posOrdemAux(No* no) const {
+    if (no != nullptr) {
+        posOrdemAux(no->esquerda);
+        posOrdemAux(no->direita);
+        std::cout << no->dado->getID() << " ";
+    }
+}
+
+
+ArvoreBinaria::~ArvoreBinaria() {
     limpar(raiz);
     raiz = nullptr;
-    NdeElementos = 0;
 }
 
-template<typename T>
-void ArvoreBinaria<T>::limpar(No* no) {
+
+void ArvoreBinaria::limpar(No* no) {
     if (no != nullptr) {
         limpar(no->esquerda);
         limpar(no->direita);

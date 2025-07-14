@@ -1,16 +1,14 @@
 #include "../include/ListaDuplamenteEncadeada.h"
 #include <iostream>
 
-template<typename T>
-ListaDuplamenteEncadeada<T>::ListaDuplamenteEncadeada() : tamanhoAtual(0)
+ListaDuplamenteEncadeada::ListaDuplamenteEncadeada() : tamanhoAtual(0)
 {
     head = nullptr;
     tail = nullptr;
 }
 
-template<typename T>
-void ListaDuplamenteEncadeada<T>::xInserirNoInicio(T elemento) {
-    No* novo = new No(elemento);
+void ListaDuplamenteEncadeada::InserirNoInicio(Elemento* item) {
+    No* novo = new No(item);
     novo->proximo = head;
     novo->anterior = nullptr;
 
@@ -25,9 +23,8 @@ void ListaDuplamenteEncadeada<T>::xInserirNoInicio(T elemento) {
     tamanhoAtual++;
 }
 
-template<typename T>
-void ListaDuplamenteEncadeada<T>::xInserirNoFinal(T elemento) {
-    No* novo = new No(elemento);
+void ListaDuplamenteEncadeada::InserirNoFinal(Elemento* item) {
+    No* novo = new No(item);
     novo->proximo = nullptr;
     novo->anterior = tail;
 
@@ -42,14 +39,14 @@ void ListaDuplamenteEncadeada<T>::xInserirNoFinal(T elemento) {
     tamanhoAtual++;
 }
 
-template<typename T>
-T ListaDuplamenteEncadeada<T>::xRemoverPrimeiro() {
+
+Elemento* ListaDuplamenteEncadeada::RemoverPrimeiro() {
     if (head == nullptr) {
         throw std::out_of_range("A lista está vazia"); //se a lista estiver vazia indica impossibilidade de remoção
     }
 
     No* removido = head; //guarda o ponteiro para o nó a ser removido
-    T dado = removido->dado; //pega o valor que sera retornado
+    Elemento* dado = removido->dado; //pega o valor que sera retornado
 
     head = head->proximo; //avança o cabeca para o seu posterior
 
@@ -65,14 +62,14 @@ T ListaDuplamenteEncadeada<T>::xRemoverPrimeiro() {
     return dado;//retorna o valor removido
 }
 
-template<typename T>
-T ListaDuplamenteEncadeada<T>::xRemoverUltimo() { //no geral, segue a mesma ideia do RemoverPrimeiro mas retrocede a cauda o inves de avançar o cabeca
+
+Elemento* ListaDuplamenteEncadeada::RemoverUltimo() { //no geral, segue a mesma ideia do RemoverPrimeiro mas retrocede a cauda o inves de avançar o cabeca
     if (tail == nullptr) {
         throw std::out_of_range("A lista está vazia");
     }
 
     No* removido = tail;
-    T dado = removido->dado;
+    Elemento* dado = removido->dado;
 
     tail = tail->anterior;
 
@@ -88,8 +85,7 @@ T ListaDuplamenteEncadeada<T>::xRemoverUltimo() { //no geral, segue a mesma idei
     return dado;
 }
 
-template<typename T>
-T ListaDuplamenteEncadeada<T>::xRemoverPeloId(int id) {
+Elemento* ListaDuplamenteEncadeada::RemoverPeloId(int id) {
     if (head == nullptr) {
         throw std::out_of_range("Lista vazia");
     }
@@ -97,8 +93,8 @@ T ListaDuplamenteEncadeada<T>::xRemoverPeloId(int id) {
     No* atual = head;
 
     while (atual != nullptr) {//percorre do cabeca ate a cauda enquanto n for nulo
-        if (atual->dado.getId() == id) { //se achou
-            T dadoRemovido = atual->dado; //salva o valor em dado
+        if (atual->dado->getID() == id) { //se achou
+            Elemento* dadoRemovido = atual->dado; //salva o valor em dado
 
             if (atual->anterior != nullptr) {
                 atual->anterior->proximo = atual->proximo; //se tinha um anterior estabelece que o proximo do anterior é o proximo do atual (como se removesse um meio)
@@ -124,12 +120,11 @@ T ListaDuplamenteEncadeada<T>::xRemoverPeloId(int id) {
     throw std::runtime_error("Elemento com id não encontrado");
 }
 
-template<typename T>
-T ListaDuplamenteEncadeada<T>::xBuscarPeloId(int id) const {
+Elemento* ListaDuplamenteEncadeada::BuscarPeloId(int id) const {
     No* atual = head;
 
     while (atual != nullptr) { //percorre toda lista 
-        if (atual->dado.getId() == id) {
+        if (atual->dado->getID() == id) {
             return atual->dado; //retorna o dado quando achou o id
         }
         atual = atual->proximo; 
@@ -138,45 +133,57 @@ T ListaDuplamenteEncadeada<T>::xBuscarPeloId(int id) const {
     throw std::runtime_error("Elemento com o id não encontrado");
 }
 
-template<typename T>
-bool ListaDuplamenteEncadeada<T>::estaVazia() const {
+void ListaDuplamenteEncadeada::AlterarPeloId(int id, Elemento* novoItem) {
+    No* atual = head;
+
+    while (atual != nullptr) {
+        if (atual->dado->getID() == id) { // Encontrou o nó a ser alterado
+            delete atual->dado;           // Apaga o objeto antigo
+            atual->dado = novoItem;       // Substitui pelo novo objeto
+            return;                       // Sai do método
+        }
+        atual = atual->proximo;
+    }
+
+    throw std::runtime_error("Elemento com id nao encontrado para alteracao");
+}
+
+bool ListaDuplamenteEncadeada::estaVazia() const {
     return tamanhoAtual == 0;
 }
 
-template<typename T>
-int ListaDuplamenteEncadeada<T>::getTamanho() const {
+int ListaDuplamenteEncadeada::getTamanho() const {
     return tamanhoAtual;
 }
 
-template<typename T>
-T ListaDuplamenteEncadeada<T>::getPrimeiro() const {
+Elemento* ListaDuplamenteEncadeada::getPrimeiro() const {
     if (head == nullptr)
         throw std::out_of_range("Lista vazia");
     return head->dado;
 }
 
-template<typename T>
-T ListaDuplamenteEncadeada<T>::getUltimo() const {
+
+Elemento* ListaDuplamenteEncadeada::getUltimo() const {
     if (tail == nullptr)
         throw std::out_of_range("Lista vazia");
     return tail->dado;
 }
 
-template<typename T>
-void ListaDuplamenteEncadeada<T>::imprimirLista() const {
+void ListaDuplamenteEncadeada::imprimirLista() const {
     No* atual = head;
     while (atual != nullptr) {
-        std::cout << atual->dado << " -> ";
+        atual->dado->imprimirInfo();
+        std::cout << " -> ";
         atual = atual->proximo;
     }
     std::cout << "null\n";
 }
 
-template<typename T>
-ListaDuplamenteEncadeada<T>::~ListaDuplamenteEncadeada() {
+ListaDuplamenteEncadeada::~ListaDuplamenteEncadeada() {
     No* atual = head;
     while (atual != nullptr) {
         No* proximo = atual->proximo;
+        delete atual->dado;
         delete atual;
         atual = proximo;
     }

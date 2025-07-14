@@ -1,7 +1,7 @@
 #ifndef LISTAORDENADA_H
 #define LISTAORDENADA_H
 
-#include <elemento.h>
+#include "elemento.h"
 
 class ListaOrdenada
 {

@@ -59,7 +59,7 @@ Autores: [Barizon]
 
 - [ ]   7 - ListaDuplamenteEncadeada
             (inserirNoInicio, inserirNoFim, removerPeloId, buscarPeloId, etc.).
-Autores: []
+Autores: [Pablo]
 
 
 - [ ]   8 - ListaDuplamenteEncadeadaCircular robustas e com todas as operações de manipulação 
@@ -90,6 +90,6 @@ operações de manipulação.
             Implemente também os três tipos de percurso: 
             emOrdem, preOrdem e posOrdem. 
             Os percursos devem imprimir oatributo ID de cada nó.
-Autores: []
+Autores: [Pabloo]
 
 

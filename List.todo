@@ -57,7 +57,7 @@ Autores: [Antonio]
 Autores: [Barizon]
 
 
-- [ ]   7 - ListaDuplamenteEncadeada
+- [X]   7 - ListaDuplamenteEncadeada
             (inserirNoInicio, inserirNoFim, removerPeloId, buscarPeloId, etc.).
 Autores: [Pablo]
 
@@ -67,8 +67,8 @@ Autores: [Pablo]
 Autores: []
 
 
-- [ ]   9 - Pilha
-Autores: []
+- [X]   9 - Pilha
+Autores: [Davi]
 
 - [ ]   9 - Fila
 Autores: []
@@ -82,7 +82,7 @@ uma instância de uma de suas classes para listas encadeadas.
 Escolha a estrutura mais adequada para reduzir ao máximo a complexidade computacional das
 operações de manipulação.
 
-- [ ]   9 - ArvoreBinariaBusca: Assim como realizado anteriormente,
+- [X]   9 - ArvoreBinariaBusca: Assim como realizado anteriormente,
             esconda completamente o uso de uma classe para os nós 
             da árvore do usuário final. Mantenha a propriedade fundamental 
             das árvores binárias de busca baseada no atributo ID do nó.

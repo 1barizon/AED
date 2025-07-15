@@ -1,4 +1,6 @@
 #include "../include/ArvoreBinaria.h"
+#include "../include/PilhaEncapsulada.h"
+
 #include <iostream>
 
 int main() {
@@ -51,5 +53,15 @@ int main() {
     std::cout << "Percurso em ordem após remoção: ";
     arvore.emOrdem();  
 
+     PilhaEncapsulada p;
+    p.push(5);
+    p.push(15);
+    p.push(25);
+    p.imprimir();
+    p.pop();
+    p.imprimir();
+
     return 0;
 }
+
+
